@@ -1,0 +1,39 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  # This is the name of the Argo CD application itself.
+  name: webapp
+  # This manifest must be created in the 'argocd' namespace where Argo CD lives.
+  namespace: argocd
+spec:
+  # The project is a grouping of applications in Argo CD. 'default' is fine to start.
+  project: default
+
+  # This section tells Argo CD WHERE to find your deployment files (the source).
+  source:
+    # --- IMPORTANT ---
+    # Replace this with the HTTPS URL of your new GitOps repository.
+    repoURL: 'https://github.com/GreatSoravit/aws-argocd-explore.git'
+    
+    # This is the branch Argo CD should watch. 'HEAD' means the default branch (usually 'main').
+    targetRevision: HEAD
+    
+    # The folder inside your GitOps repo where your Kubernetes manifests are located.
+    path: .
+
+  # This section tells Argo CD WHERE to deploy your application (the destination).
+  destination:
+    # This URL means "deploy to the same cluster where Argo CD is running."
+    server: 'https://kubernetes.default.svc'
+    
+    # This is the namespace where your application's Deployment and Service will be created.
+    namespace: webapp
+
+  # This section configures the automation.
+  syncPolicy:
+    # This enables automatic syncing. When Argo CD sees a change in Git, it will apply it.
+    automated:
+      # This tells Argo CD to delete resources that are removed from Git.
+      prune: true
+      # This tells Argo CD to automatically fix any manual changes made to the cluster.
+      selfHeal: true
