@@ -4,7 +4,7 @@ metadata:
   name: aws-argocd-explore
   namespace: webapp
 spec:
-  type: NodePort
+  type: LoadBalancer
   selector:
     app: aws-argocd-explore
   ports:
