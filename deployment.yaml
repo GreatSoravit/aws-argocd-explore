@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: aws-argocd-explore
+  namespace: webapp
+  labels:
+    app: aws-argocd-explore
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: aws-argocd-explore
+  template:
+    metadata:
+      labels:
+        app: aws-argocd-explore
+    spec:
+      containers:
+      - name: aws-argocd-explore
+        image: soravitwetprasit/aws-argocd-explore:1.0
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8080
+        livenessProbe:
+          httpGet:
+            path: /actuator/health
+            port: 8080
+          initialDelaySeconds: 5
+          periodSeconds: 10
+          failureThreshold: 2
