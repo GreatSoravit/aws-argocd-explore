@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: aws-argocd-explore
-        image: soravitwetprasit/aws-argocd-explore:2.0-c68aa73947f406276888ccd457a840665b17f9bd
+        image: soravitwetprasit/aws-argocd-explore:2.0-6102216dfbf512712306d2aed8a4947d50648561
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 8080
