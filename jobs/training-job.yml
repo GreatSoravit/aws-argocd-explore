@@ -1,0 +1,31 @@
+# FILE: jobs/training-job.yaml
+
+apiVersion: batch/v1
+kind: Job
+metadata:
+  # This name will be updated dynamically by your GitHub Action to be unique for each run
+  name: colon-cancer-training-job-placeholder
+  # Deploy this job into the 'ml-jobs' namespace for better isolation
+  namespace: ml-jobs
+spec:
+  template:
+    spec:
+      containers:
+      - name: training-container
+        # The image tag will be updated by your GitHub Action.
+        # This points to your separate training image repository.
+        image: soravitwetprasit/mlops-model-train:placeholder
+        
+        # Arguments to pass to your training_script.sh inside the container
+        args: ["--train", "--report", "--all"]
+        
+        # Request a GPU for the training job
+        resources:
+          limits:
+            nvidia.com/gpu: 1
+            
+      # This policy means the pod will not be restarted if the job completes successfully
+      restartPolicy: OnFailure
+  
+  # The job will be terminated if it fails more than once.
+  backoffLimit: 1
