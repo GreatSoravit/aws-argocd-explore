@@ -4,17 +4,17 @@ apiVersion: batch/v1
 kind: Job
 metadata:
   # This name will be updated dynamically by your GitHub Action to be unique for each run
-  name: colon-cancer-training-job-placeholder
+  colon-cancer-training-job-8ccdadc3d176db8db2b7e7119d6f7774ae36d3f6
   # Deploy this job into the 'ml-jobs' namespace for better isolation
   namespace: ml-jobs
 spec:
   template:
     spec:
       containers:
-      - name: training-container
+      - colon-cancer-training-job-8ccdadc3d176db8db2b7e7119d6f7774ae36d3f6
         # The image tag will be updated by your GitHub Action.
         # This points to your separate training image repository.
-        image: soravitwetprasit/mlops-model-train:placeholder
+        soravitwetprasit/mlops-model-train:8ccdadc3d176db8db2b7e7119d6f7774ae36d3f6
         
         # Arguments to pass to your training_script.sh inside the container
         args: ["--train", "--report", "--all"]
