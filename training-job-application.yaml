@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: webapp
+  name: training-job
   namespace: argocd
 spec:
   project: default
@@ -14,23 +14,22 @@ spec:
     targetRevision: HEAD
     
     # The folder inside your GitOps repo where your Kubernetes manifests are located.
-    path: webapp
+    path: jobs
 
   # This section tells Argo CD WHERE to deploy your application (the destination).
   destination:
-    # This URL means "deploy to the same cluster where Argo CD is running."
     server: 'https://kubernetes.default.svc'
-    namespace: webapp
+    # Deploy the jobs into a dedicated namespace
+    namespace: ml-jobs
 
-  # This section configures the automation.
   syncPolicy:
-    # This enables automatic syncing. When Argo CD sees a change in Git, it will apply it.
     automated:
       # This tells Argo CD to delete resources that are removed from Git.
       prune: true
       # This tells Argo CD to automatically fix any manual changes made to the cluster.
       selfHeal: true
-      
+    
+    # These options are useful for managing jobs and namespaces
     syncOptions:
     # delete this specific type of resource last, after everything else is gone.
     - PruneLast=true
