@@ -8,10 +8,10 @@ metadata:
 spec:
   template:
     spec:
-      # 1. Reference the Service Account that is linked to the IAM Role
+      # Reference the Service Account that is linked to the IAM Role
       serviceAccountName: training-job-sa
       
-      # 2. Define the initContainer. It runs to completion before the main container starts.
+      # Define the initContainer. It runs to completion before the main container starts.
       initContainers:
       - name: s3-data-downloader
         image: amazon/aws-cli:latest
@@ -31,7 +31,13 @@ spec:
         image: soravitwetprasit/mlops-model-train:placeholder
         
         # Arguments to pass to training_script.sh inside the container
-        args: ["--train", "--epochs", "10", "--seed", "42"]
+        args: 
+          - "bash"
+          - "-c"
+          - |
+            ./training_script.sh --train --epochs 100 --seed 42 &&
+            aws s3 cp /app/models/best_colon_cancer_model.pth s3://colon-cancer-train-data/models/best_colon_cancer_model-$(date +%s).pth &&
+            aws s3 cp /app/logs/training_history.json s3://colon-cancer-train-data/outputs/training_history-$(date +%s).json
         # Request a GPU for the training job
         resources:
           limits:
