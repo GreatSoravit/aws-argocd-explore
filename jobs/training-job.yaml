@@ -2,7 +2,7 @@ apiVersion: batch/v1
 kind: Job
 metadata:
   # name will be updated dynamically by GitHub Action to be unique for each run
-  name: colon-training-job-bc5d5da4ba259e04f2eb29d6fec500500fc24cb8
+  name: colon-training-job-33dac6edb400def804272e6d6ceb399e758a76e4
   # Deploy this job into the 'ml-jobs' namespace
   namespace: ml-jobs
 spec:
@@ -28,7 +28,7 @@ spec:
       containers:
       - name: training-container
         # The image tag will be updated by GitHub Action.
-        image: soravitwetprasit/mlops-model-train:bc5d5da4ba259e04f2eb29d6fec500500fc24cb8
+        image: soravitwetprasit/mlops-model-train:33dac6edb400def804272e6d6ceb399e758a76e4
         
         # Arguments to pass to training_script.sh inside the container
         args: 
