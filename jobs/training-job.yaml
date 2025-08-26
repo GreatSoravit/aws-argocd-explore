@@ -1,29 +1,61 @@
-# FILE: jobs/training-job.yaml
-
 apiVersion: batch/v1
 kind: Job
 metadata:
-  # This name will be updated dynamically by your GitHub Action to be unique for each run
+  # name will be updated dynamically by GitHub Action to be unique for each run
   name: colon-cancer-training-job-placeholder
-  # Deploy this job into the 'ml-jobs' namespace for better isolation
+  # Deploy this job into the 'ml-jobs' namespace
   namespace: ml-jobs
 spec:
   template:
     spec:
+      # 1. Reference the Service Account that is linked to the IAM Role
+      serviceAccountName: training-job-sa
+      
+      # 2. Define the initContainer. It runs to completion before the main container starts.
+      initContainers:
+      - name: s3-data-downloader
+        image: amazon/aws-cli:latest
+        command:
+          - "aws"
+          - "s3"
+          - "sync"
+          - "s3://colon-cancer-train-data/data/" # Source in S3
+          - "/app/data" # Destination in the shared volume
+        volumeMounts:
+        - name: data
+          mountPath: /app/data
+    
       containers:
       - name: training-container
-        # The image tag will be updated by your GitHub Action.
-        # This points to your separate training image repository.
+        # The image tag will be updated by GitHub Action.
         image: soravitwetprasit/mlops-model-train:placeholder
         
-        # Arguments to pass to your training_script.sh inside the container
-        args: ["--train", "--report", "--all"]
-        
+        # Arguments to pass to training_script.sh inside the container
+        args: ["--train", "--epochs", "10", "--seed", "42"]
         # Request a GPU for the training job
         resources:
           limits:
             nvidia.com/gpu: 1
-            
+        volumeMounts:
+          - name: data
+            mountPath: /app/data
+          - name: models
+            mountPath: /app/models
+          - name: outputs
+            mountPath: /app/outputs
+          - name: logs
+            mountPath: /app/logs
+                 
+      volumes:
+      - name: data
+        emptyDir: {}
+      - name: models
+        emptyDir: {}
+      - name: outputs
+        emptyDir: {}
+      - name: logs
+        emptyDir: {}
+        
       # This policy means the pod will not be restarted if the job completes successfully
       restartPolicy: OnFailure
   
