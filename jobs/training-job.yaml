@@ -8,10 +8,10 @@ metadata:
 spec:
   template:
     spec:
-      # 1. Reference the Service Account that is linked to the IAM Role
+      # Reference the Service Account that is linked to the IAM Role
       serviceAccountName: training-job-sa
       
-      # 2. Define the initContainer. It runs to completion before the main container starts.
+      # Define the initContainer. It runs to completion before the main container starts.
       initContainers:
       - name: s3-data-downloader
         image: amazon/aws-cli:latest
