@@ -2,7 +2,7 @@ apiVersion: batch/v1
 kind: Job
 metadata:
   # name will be updated dynamically by GitHub Action to be unique for each run
-  name: colon-cancer-training-job-placeholder
+  name: colon-cancer-training-job-d2ddfa13b1c4f49b61160e47e893a1cb69c94abb
   # Deploy this job into the 'ml-jobs' namespace
   namespace: ml-jobs
 spec:
