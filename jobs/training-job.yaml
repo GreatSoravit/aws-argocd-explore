@@ -36,7 +36,9 @@ spec:
             chmod +x ./training_script.sh &&
             ./training_script.sh --train --epochs 10 --seed 42 &&
             aws s3 cp /app/models/best_colon_cancer_model.pth s3://colon-cancer-train-data/models/best_colon_cancer_model-$(date +%s).pth &&
-            aws s3 cp /app/outputs/training_history.json s3://colon-cancer-train-data/outputs/training_history-$(date +%s).json
+            aws s3 cp /app/logs/training_history.json s3://colon-cancer-train-data/logs/training_history-$(date +%s).json &&
+            aws s3 cp /app/outputs/training_history.png s3://colon-cancer-train-data/outputs/training_history-$(date +%s).png
+            
         # Request a GPU for the training job
         resources:
           limits:
